@@ -1,56 +1,51 @@
 import p5 from 'p5'
-import {TorontoRainPixelProvider} from "./api/TorontoRainPixelProvider";
 import {Pixel} from "./api/PixelProvider";
+import {PaintableSketch} from "./Painter";
 
-export class Sketch extends p5 {
+export class Sketch extends PaintableSketch {
     readonly order = 7
     frame = 0
-    scalingFactor = this.int(this.pow(2, this.order))
-    maximumPoints = this.pow(this.scalingFactor, 2)
+    scalingFactor = this.p5.int(this.p5.pow(2, this.order))
+    maximumPoints = this.p5.pow(this.scalingFactor, 2)
     baseSize = 512 / this.scalingFactor
     points: p5.Vector[] = []
 
     hoveredPixel: Pixel | null = null
 
-    pixelProvider = new TorontoRainPixelProvider(14210)
-    constructor() { super(() => {}) }
-
     async setup () {
-        this.createCanvas(512, 512);
+        this.p5.createCanvas(512, 512);
 
         this.points = Array(this.maximumPoints).fill(0).map((_, index) => this.hilbert(index))
-
-        await this.pixelProvider.fetch()
 
         this.updateCurve(0);
     }
 
     draw() {
-        this.background(0)
+        this.p5.background(0)
         this.updateCurve(this.frame)
-        this.fill(255)
-        this.text(this.hoveredPixel?.tooltip?? '', this.mouseX, this.mouseY - 2)
+        this.p5.fill(255)
+        this.p5.text(this.hoveredPixel?.tooltip?? '', this.p5.mouseX, this.p5.mouseY - 2)
     }
 
     private updateCurve(offset: number) {
-        this.noStroke()
-        this.noSmooth()
+        this.p5.noStroke()
+        this.p5.noSmooth()
         this.points.forEach((point, index) => {
             const pixel = this.pixelProvider.getPixel(index + offset)
-            this.fill((pixel?.intensity ?? 0))
+            this.p5.fill((pixel?.intensity ?? 0))
 
             if (
-                this.mouseX > (point.x * this.baseSize) + (this.baseSize / 2) &&
-                this.mouseX < (point.x * this.baseSize) + (this.baseSize / 2) + this.baseSize &&
-                this.mouseY > (point.y * this.baseSize) + (this.baseSize / 2) &&
-                this.mouseY < (point.y * this.baseSize) + (this.baseSize / 2) + this.baseSize &&
+                this.p5.mouseX > (point.x * this.baseSize) + (this.baseSize / 2) &&
+                this.p5.mouseX < (point.x * this.baseSize) + (this.baseSize / 2) + this.baseSize &&
+                this.p5.mouseY > (point.y * this.baseSize) + (this.baseSize / 2) &&
+                this.p5.mouseY < (point.y * this.baseSize) + (this.baseSize / 2) + this.baseSize &&
                 pixel
             ) {
                 this.hoveredPixel = pixel
-                this.fill('#FF0000')
+                this.p5.fill('#FF0000')
             }
 
-            this.square((point.x * this.baseSize) + (this.baseSize / 2), (point.y * this.baseSize) + (this.baseSize / 2), this.baseSize)
+            this.p5.square((point.x * this.baseSize) + (this.baseSize / 2), (point.y * this.baseSize) + (this.baseSize / 2), this.baseSize)
 
         })
     }
@@ -69,7 +64,7 @@ export class Sketch extends p5 {
         for (let j = 1; j < this.order; j++) {
             i = i >>> 2;
             index = i & 3;
-            let len = this.pow(2, j);
+            let len = this.p5.pow(2, j);
             if (index == 0) {
                 let temp = v.x;
                 v.x = v.y;
