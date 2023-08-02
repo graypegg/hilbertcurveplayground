@@ -2,7 +2,7 @@ import p5 from 'p5'
 import {TorontoRainPixelProvider} from "./api/TorontoRainPixelProvider";
 import {Pixel} from "./api/PixelProvider";
 
-export class Painter extends p5 {
+export class Sketch extends p5 {
     readonly order = 7
     frame = 0
     scalingFactor = this.int(this.pow(2, this.order))
@@ -12,7 +12,7 @@ export class Painter extends p5 {
 
     hoveredPixel: Pixel | null = null
 
-    pixelProvider = new TorontoRainPixelProvider()
+    pixelProvider = new TorontoRainPixelProvider(14210)
     constructor() { super(() => {}) }
 
     async setup () {

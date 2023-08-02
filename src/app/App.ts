@@ -1,10 +1,10 @@
 import {PixelProvider} from "./api/PixelProvider";
 import {TorontoRainPixelProvider} from "./api/TorontoRainPixelProvider";
-import {Painter} from "./Painter";
+import {Sketch} from "./Sketch";
 
 export class App {
     protected pixelProvider: PixelProvider = new TorontoRainPixelProvider()
-    protected painter = new Painter()
+    protected painter = new Sketch()
 
     mount (el: HTMLElement) {
     }

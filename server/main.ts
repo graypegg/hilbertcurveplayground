@@ -42,7 +42,7 @@ app.get('/meters', (req, res) => {
 
 app.get('/meters/:meterId', (req, res) => {
     const meterId = req.params['meterId']
-    db.all('SELECT meter_id, rainfall, created_at FROM reading WHERE meter_id = (?)', [meterId], (err, result: ReadingEntry[]) => {
+    db.all('SELECT meter_id, rainfall, created_at FROM reading WHERE meter_id = (?) ORDER BY created_at', [meterId], (err, result: ReadingEntry[]) => {
         if (err) {
             handleError(res, err)
             return
