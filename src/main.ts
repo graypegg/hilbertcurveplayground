@@ -1,6 +1,5 @@
 import './style.css'
-import {TorontoRainPixelProvider} from "./app/api/TorontoRainPixelProvider";
+import {App} from "./app/App";
+const app = new App()
 
-const pixelProvider = new TorontoRainPixelProvider()
-
-pixelProvider.fetch()
+app.mount(document.body)

@@ -6,6 +6,6 @@ export interface Pixel {
 export interface PixelProvider {
     fetch (): Promise<void>
     isReady: boolean
-    getPixel (index: number): Pixel
+    getPixel (index: number): Pixel | undefined
     totalPixels: number
 }

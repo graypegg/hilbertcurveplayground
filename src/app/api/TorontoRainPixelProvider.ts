@@ -1,15 +1,35 @@
-import {PixelProvider} from "./PixelProvider";
+import {Pixel, PixelProvider} from "./PixelProvider";
+import {ReadingsResponse} from "../../../server/responses/readings";
 
 export class TorontoRainPixelProvider implements PixelProvider {
-    static BASE_URL = 'https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/f2933501-0373-4734-b50c-4e4f39646180/resource/2132aa90-2fac-484a-9608-758c4ec10900/download/precipitation-data-2023.csv'
+    static BASE_URL = 'http://localhost:3000'
 
-    private values = []
+    constructor(protected meterId = 7674) {}
+    private pixels: Pixel[] = []
+
+    private makeMeterReadingsUri () {
+        return `${TorontoRainPixelProvider.BASE_URL}/meters/${this.meterId}`
+    }
 
     async fetch(): Promise<void> {
-        const response = await fetch(TorontoRainPixelProvider.BASE_URL)
-        const csv = await response.text()
-        csv.split('\n').splice(1).map(row => row.split(','))
-        debugger
-        this.values.push()
+        const response = await (fetch(this.makeMeterReadingsUri()).then(async res => await res.json() as ReadingsResponse))
+        if (response.success) {
+            this.pixels = response.data.map((reading, index) => ({
+                intensity: (reading.rainfall / 1) * 255,
+                index
+            }))
+        }
+    }
+
+    get isReady () {
+        return this.totalPixels > 0
+    }
+
+    getPixel(index: number): Pixel | undefined {
+        return this.pixels[index]
+    }
+
+    get totalPixels () {
+        return this.pixels.length
     }
 }
