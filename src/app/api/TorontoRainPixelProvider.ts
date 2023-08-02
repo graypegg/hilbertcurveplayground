@@ -15,7 +15,8 @@ export class TorontoRainPixelProvider implements PixelProvider {
         const response = await (fetch(this.makeMeterReadingsUri()).then(async res => await res.json() as ReadingsResponse))
         if (response.success) {
             this.pixels = response.data.map((reading, index) => ({
-                intensity: (reading.rainfall / 1) * 255,
+                intensity: (reading.rainfall / 2) * 255,
+                tooltip: reading.created_at,
                 index
             }))
         }

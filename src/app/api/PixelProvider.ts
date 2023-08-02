@@ -1,6 +1,7 @@
 export interface Pixel {
     intensity: number,
-    index: number
+    index: number,
+    tooltip: string
 }
 
 export interface PixelProvider {

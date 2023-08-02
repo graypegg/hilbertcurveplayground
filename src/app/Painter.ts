@@ -1,5 +1,6 @@
 import p5 from 'p5'
 import {TorontoRainPixelProvider} from "./api/TorontoRainPixelProvider";
+import {Pixel} from "./api/PixelProvider";
 
 export class Painter extends p5 {
     readonly order = 7
@@ -9,7 +10,9 @@ export class Painter extends p5 {
     baseSize = 512 / this.scalingFactor
     points: p5.Vector[] = []
 
-    pixelProvider = new TorontoRainPixelProvider(7675)
+    hoveredPixel: Pixel | null = null
+
+    pixelProvider = new TorontoRainPixelProvider()
     constructor() { super(() => {}) }
 
     async setup () {
@@ -23,7 +26,10 @@ export class Painter extends p5 {
     }
 
     draw() {
+        this.background(0)
         this.updateCurve(this.frame)
+        this.fill(255)
+        this.text(this.hoveredPixel?.tooltip?? '', this.mouseX, this.mouseY - 2)
     }
 
     private updateCurve(offset: number) {
@@ -32,7 +38,20 @@ export class Painter extends p5 {
         this.points.forEach((point, index) => {
             const pixel = this.pixelProvider.getPixel(index + offset)
             this.fill((pixel?.intensity ?? 0))
+
+            if (
+                this.mouseX > (point.x * this.baseSize) + (this.baseSize / 2) &&
+                this.mouseX < (point.x * this.baseSize) + (this.baseSize / 2) + this.baseSize &&
+                this.mouseY > (point.y * this.baseSize) + (this.baseSize / 2) &&
+                this.mouseY < (point.y * this.baseSize) + (this.baseSize / 2) + this.baseSize &&
+                pixel
+            ) {
+                this.hoveredPixel = pixel
+                this.fill('#FF0000')
+            }
+
             this.square((point.x * this.baseSize) + (this.baseSize / 2), (point.y * this.baseSize) + (this.baseSize / 2), this.baseSize)
+
         })
     }
 
