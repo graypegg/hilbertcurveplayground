@@ -1,5 +1,9 @@
 import './style.css'
 import {App} from "./app/App";
+
 const app = new App()
 
-app.mount(document.body)
+const el = document.querySelector('#app');
+if (el) {
+    app.mount(el)
+}
