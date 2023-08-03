@@ -16,10 +16,16 @@ export abstract class WeatherPixelProvider implements PixelProvider {
      */
     protected abstract valueToColour(reading: number): Pixel["colour"]
 
+    // == Constants
+
     static readonly BASE_URL = 'https://archive-api.open-meteo.com'
     static readonly ONE_DAY = 86400000
 
+    // == State
+
     private pixels: Pixel[] = []
+
+    // == Implementing PixelProvider
 
     async fetch(): Promise<void> {
         const rawResponse = await fetch(this.makeHistoricalDataUri(this.WEATHER_DATA_TYPE, 1691031970401 - ((365 * 5) * WeatherPixelProvider.ONE_DAY), 1691031970401))
@@ -40,6 +46,8 @@ export abstract class WeatherPixelProvider implements PixelProvider {
     get totalPixels() {
         return this.pixels.length
     }
+
+    // == Private methods
 
     protected parseResponse(response: SuccessfulResponse): Pixel[] {
         return response.hourly[this.WEATHER_DATA_TYPE].map((reading, index) => ({
