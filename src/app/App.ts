@@ -1,6 +1,6 @@
 import {PixelProvider} from "./api/PixelProvider";
 import {Painter} from "./Painter";
-import sketch from "./Sketch";
+import sketch from "./sketch";
 import {TempPixelProvider} from "./api/TempPixelProvider";
 
 export class App {

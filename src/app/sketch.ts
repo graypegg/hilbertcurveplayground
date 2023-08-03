@@ -32,7 +32,9 @@ export default function (p: p5, pixelProvider: PixelProvider) {
         p.noSmooth()
         points.forEach((point, index) => {
             const pixel = pixelProvider.getPixel(index + offset)
-            p.fill((pixel?.intensity ?? 0))
+            if (pixel) {
+                p.fill(pixel.colour.r, pixel.colour.g, pixel.colour.b)
+            }
 
             if (
                 p.mouseX > (point.x * baseSize) + (baseSize / 2) &&
@@ -58,29 +60,27 @@ export default function (p: p5, pixelProvider: PixelProvider) {
             new p5.Vector(1, 0)
         ];
 
-        let index = i & 3;
-        let v = points[index];
+        let index = i & 0b00000011;
+        let vector = points[index];
 
         for (let j = 1; j < order; j++) {
             i = i >>> 2;
-            index = i & 3;
+            index = i & 0b00000011;
             let len = p.pow(2, j);
             if (index == 0) {
-                let temp = v.x;
-                v.x = v.y;
-                v.y = temp;
+                vector.reflect(new p5.Vector(-1, 1))
             } else if (index == 1) {
-                v.y += len;
+                vector.y += len;
             } else if (index == 2) {
-                v.x += len;
-                v.y += len;
+                vector.x += len;
+                vector.y += len;
             } else if (index == 3) {
-                let temp = len - 1 - v.x;
-                v.x = len - 1 - v.y;
-                v.y = temp;
-                v.x += len;
+                let temp = len - 1 - vector.x;
+                vector.x = len - 1 - vector.y;
+                vector.y = temp;
+                vector.x += len;
             }
         }
-        return v;
+        return vector;
     }
 }

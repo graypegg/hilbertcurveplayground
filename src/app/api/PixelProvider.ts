@@ -1,6 +1,12 @@
+import p5 from "p5";
+
 export interface Pixel {
-    intensity: number,
-    index: number,
+    colour: {
+        r: number,
+        g: number,
+        b: number
+    }
+    index: number
     tooltip: string
 }
 

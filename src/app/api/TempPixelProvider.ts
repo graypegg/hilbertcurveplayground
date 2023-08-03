@@ -21,18 +21,20 @@ export interface FailedResponse {
 
 type Response = SuccessfulResponse | FailedResponse
 
-export class TempApiError extends Error {}
+export class TempApiError extends Error {
+}
 
 export class TempPixelProvider implements PixelProvider {
     static BASE_URL = 'https://archive-api.open-meteo.com'
     private pixels: Pixel[] = []
 
-    private makeDateString (timestamp: number): string {
+    private makeDateString(timestamp: number): string {
         const date = new Date(timestamp)
         return `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
     }
+
     private makeHistoricalTempUri(start: number, end: number) {
-        return `${TempPixelProvider.BASE_URL}/v1/era5?latitude=52.52&longitude=13.41&start_date=${this.makeDateString(start)}&end_date=${this.makeDateString(end)}&hourly=temperature_2m`
+        return `${TempPixelProvider.BASE_URL}/v1/era5?latitude=45.5148742&longitude=-73.5180036&start_date=${this.makeDateString(start)}&end_date=${this.makeDateString(end)}&hourly=temperature_2m`
     }
 
     async fetch(): Promise<void> {
@@ -41,14 +43,14 @@ export class TempPixelProvider implements PixelProvider {
 
         if (!response.error) {
             this.pixels = response.hourly.temperature_2m.map((reading, index) => ({
-                intensity: (reading + 50) * 2,
+                colour: this.valueToColour(reading),
                 tooltip: response.hourly.time[index],
                 index
             }))
         }
     }
 
-    get isReady () {
+    get isReady() {
         return this.pixels.length !== 0
     }
 
@@ -58,5 +60,13 @@ export class TempPixelProvider implements PixelProvider {
 
     get totalPixels() {
         return this.pixels.length
+    }
+
+    private valueToColour(reading: number): Pixel['colour'] {
+        return {
+            r: reading > 0 ? (reading / 35) * 255 : 0,
+            g: 0,
+            b: reading < 0 ? (Math.abs(reading) / 20) * 255 : 0,
+        }
     }
 }
