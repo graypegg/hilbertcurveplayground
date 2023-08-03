@@ -1,5 +1,4 @@
 import {PixelProvider} from "./api/PixelProvider";
-import {TorontoRainPixelProvider} from "./api/TorontoRainPixelProvider";
 import {Painter} from "./Painter";
 import sketch from "./Sketch";
 import {TempPixelProvider} from "./api/TempPixelProvider";

@@ -3,6 +3,7 @@ import {Pixel, PixelProvider} from "./api/PixelProvider";
 
 export default function (p: p5, pixelProvider: PixelProvider) {
     const order = 7
+    let frame = 0
     const scalingFactor = p.int(p.pow(2, order))
     const maximumPoints = p.pow(scalingFactor, 2)
     const baseSize = 512 / scalingFactor
@@ -13,14 +14,17 @@ export default function (p: p5, pixelProvider: PixelProvider) {
     p.setup = async () => {
         p.createCanvas(512, 512);
 
+        await pixelProvider.fetch()
+
         updateCurve(0);
     }
 
     p.draw = () => {
-        p.background(0)
-        updateCurve(0)
+        updateCurve(++frame);
         p.fill(255)
-        p.text(hoveredPixel?.tooltip?? '', p.mouseX, p.mouseY - 2)
+        if (hoveredPixel) {
+            p.text(new Date(hoveredPixel.tooltip).toLocaleDateString('en', {dateStyle: 'medium'}), p.mouseX, p.mouseY - 2)
+        }
     }
 
     function updateCurve(offset: number) {

@@ -7,7 +7,6 @@ export class Painter {
     ) { }
 
     async paint (sketch: (p: p5, pixelProvider: PixelProvider) => void) {
-        await this.pixelProvider.fetch()
         new p5(p => sketch(p, this.pixelProvider))
     }
 }
