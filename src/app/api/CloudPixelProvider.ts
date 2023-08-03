@@ -3,6 +3,7 @@ import {Pixel} from "./PixelProvider";
 import {WeatherDataType} from "./types";
 
 export class CloudPixelProvider extends WeatherPixelProvider {
+    name = 'Cloud Cover'
     WEATHER_DATA_TYPE: WeatherDataType = 'cloudcover'
 
     protected valueToColour(reading: number): Pixel["colour"] {

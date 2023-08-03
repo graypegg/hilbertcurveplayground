@@ -2,4 +2,4 @@ import './style.css'
 import {App} from "./app/App";
 const app = new App()
 
-app.mount()
+app.mount(document.body)

@@ -9,8 +9,7 @@ export interface Pixel {
 }
 
 export interface PixelProvider {
+    name: string,
     fetch (): Promise<void>
-    isReady: boolean
     getPixel (index: number): Pixel | undefined
-    totalPixels: number
 }
