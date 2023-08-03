@@ -6,12 +6,14 @@ import {RainPixelProvider} from "./api/RainPixelProvider";
 import {CloudPixelProvider} from "./api/CloudPixelProvider";
 import {Controls} from "./ui/controls";
 import {Mountable} from "./types";
+import {AirPressurePixelProvider} from "./api/AirPressurePixelProvider";
 
 export class App implements Mountable {
     readonly pixelProviders: PixelProvider[] = [
         new TempPixelProvider(),
         new RainPixelProvider(),
-        new CloudPixelProvider()
+        new CloudPixelProvider(),
+        new AirPressurePixelProvider()
     ]
 
     private pixelProvider: PixelProvider = this.pixelProviders[0]

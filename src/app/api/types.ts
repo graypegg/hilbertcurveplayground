@@ -1,4 +1,4 @@
-export type WeatherDataType = 'temperature_2m' | 'rain' | 'cloudcover'
+export type WeatherDataType = 'temperature_2m' | 'rain' | 'cloudcover' | 'pressure_msl'
 
 interface TimestampEntries {
     time: string[]
