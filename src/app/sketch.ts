@@ -55,6 +55,4 @@ export default function (p: p5, pixelProvider: PixelProvider) {
 
         })
     }
-
-
 }
